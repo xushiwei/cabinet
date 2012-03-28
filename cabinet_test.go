@@ -371,3 +371,20 @@ func TestDump(t *testing.T) {
 		t.Errorf("Count() (copy) expected %d got %d", count, count2)
 	}
 }
+
+func TestCas(t *testing.T) {
+	kc := newCabinet(t, test_db)
+	defer delCabinet(t, kc)
+	
+	err := kc.Cas([]byte("cas_key"), []byte("cas_old"), []byte("cas_new"))
+	if err == nil { t.Fatal("cas : err is nil") }
+	fmt.Println("cas :", err)
+	addKVP(t, kc, "cas_key", "cas_old1")
+	err = kc.Cas([]byte("cas_key"), []byte("cas_old"), []byte("cas_new"))
+	if err == nil { t.Fatal("cas : err is nil") }
+	fmt.Println("cas :", err)
+	setKVP(t, kc, "cas_key", "cas_old")
+	err = kc.Cas([]byte("cas_key"), []byte("cas_old"), []byte("cas_new"))
+	if err != nil { t.Fatal("cas :", err) }
+}
+

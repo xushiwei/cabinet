@@ -330,7 +330,7 @@ func (kc *KCDB) Cas(key, oval, nval []byte) (err os.Error) {
 	var coval, cnval *C.char
 	loval, lnval := len(oval), len(nval)
 	if loval > 0 {
-		coval = (*C.char)(unsafe.Pointer(&nval[0]))
+		coval = (*C.char)(unsafe.Pointer(&oval[0]))
 	}
 	if lnval > 0 {
 		cnval = (*C.char)(unsafe.Pointer(&nval[0]))
